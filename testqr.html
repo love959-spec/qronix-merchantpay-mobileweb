@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#3b3bd6" />
+  <title>테스트 앱카드 QR · PayMerchant</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
+    integrity="sha384-8FWZA6BGMXhsfO+BLtrJK0We6gg5o1JyO8xQm6peWDEUs17ACA5ziE/NIAkl9z2k"
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"
+    integrity="sha384-Kk5SjBOKprEnGfyBWfD2zROFd1Cu8kwOXxG2GIhYPcoDL2rBJS9P8Ud1ZMy4412a"
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    @media (max-width: 380px){ .qr-grid { grid-template-columns: 1fr; } }
+    .qr-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; text-align: center; }
+    .qr-card .brand { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+    .qr-card .masked { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .qr-card .qrbox { display: inline-block; width: 80%; }
+    .qr-card .qrbox svg { width: 100%; height: auto; display: block; }
+    .qr-card .tok { font-size: 10px; color: var(--muted); margin-top: 8px; word-break: break-all; font-family: ui-monospace, Consolas, monospace; }
+    .bc-card { background:#fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; text-align:center; margin-bottom: 13px; }
+    .bc-card .brand { font-weight:700; font-size:14px; margin-bottom:10px; }
+    .bc-card svg { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header class="appbar">
+      <button class="icon-btn" onclick="location.href='index.html'" aria-label="앱으로">‹</button>
+      <h1>테스트 앱카드 QR</h1>
+      <div class="bar-right"><button class="icon-btn" onclick="location.href='index.html'" aria-label="홈">⌂</button></div>
+    </header>
+    <div class="screen">
+      <div class="note" style="margin-top:0">
+        <b>사용법</b> · 이 페이지를 <b>PC 모니터(또는 다른 기기)</b>에 띄워 두고,
+        앱의 <b>현장결제 → QR/바코드 스캔</b> 단계에서 <b>휴대폰 카메라</b>로 아래 코드를 비추면 됩니다.
+        (자기 화면은 자기 폰으로 스캔할 수 없습니다.)
+      </div>
+
+      <div class="section-title">앱카드 QR 코드</div>
+      <div class="qr-grid" id="qr-grid"></div>
+
+      <div class="section-title">바코드 (1D)</div>
+      <div id="bc-list"></div>
+
+      <div class="note">스캔하면 앱이 해당 카드 정보(브랜드·마스킹번호)를 결제 결과 화면에 표시합니다.</div>
+    </div>
+  </div>
+
+  <script>
+    // 앱(app.js)의 onsiteScanned 가 파싱하는 형식: PAYCARD|브랜드코드|마스킹번호|토큰  (QR 호환 위해 ASCII 사용)
+    var cards = [
+      { code: 'SHINHAN', label: '신한카드', masked: '****1234', token: '5409710012341234' },
+      { code: 'KB',      label: '국민카드', masked: '****8821', token: '4012880088218821' },
+      { code: 'SAMSUNG', label: '삼성카드', masked: '****4410', token: '5327441044104410' },
+      { code: 'HYUNDAI', label: '현대카드', masked: '****2030', token: '4002203020302030' },
+    ];
+    var grid = document.getElementById('qr-grid');
+    cards.forEach(function (c) {
+      var payload = 'PAYCARD|' + c.code + '|' + c.masked + '|' + c.token;
+      var el = document.createElement('div');
+      el.className = 'qr-card';
+      el.innerHTML = '<div class="brand">' + c.label + '</div>' +
+                     '<div class="masked">' + c.masked + '</div>' +
+                     '<div class="qrbox"></div>' +
+                     '<div class="tok">' + payload + '</div>';
+      grid.appendChild(el);
+      try {
+        var qr = qrcode(0, 'M');          // 0 = 타입 자동선택
+        qr.addData(payload);
+        qr.make();
+        el.querySelector('.qrbox').innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+      } catch (e) {
+        el.querySelector('.tok').textContent = 'QR 생성 실패: ' + (e && e.message);
+      }
+    });
+
+    // 바코드: CODE128(앱카드 토큰), EAN-13(12자리 입력 → 체크디지트 자동계산)
+    var bcs = [
+      { brand: 'CODE128 · 앱카드 토큰', value: 'PAYCARD12345678', format: 'CODE128' },
+      { brand: 'EAN-13 · 카드번호 예시', value: '880123456789', format: 'EAN13' },
+    ];
+    var bcList = document.getElementById('bc-list');
+    bcs.forEach(function (b) {
+      var el = document.createElement('div');
+      el.className = 'bc-card';
+      el.innerHTML = '<div class="brand">' + b.brand + '</div><svg></svg>';
+      bcList.appendChild(el);
+      try {
+        window.JsBarcode(el.querySelector('svg'), b.value, {
+          format: b.format, displayValue: true, height: 64, fontSize: 14, margin: 6,
+        });
+      } catch (e) {
+        el.innerHTML += '<div class="tok">바코드 생성 실패(인터넷 필요)</div>';
+      }
+    });
+  </script>
+</body>
+</html>

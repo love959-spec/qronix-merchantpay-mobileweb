@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#3b3bd6" />
+  <title>결제하기 · PayMerchant</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast hidden"></div>
+  <script>
+    'use strict';
+    const won = (n) => Number(n || 0).toLocaleString('ko-KR');
+    const qs = new URLSearchParams(location.search);
+    // 거래번호는 영숫자만 허용 (URL 파라미터를 통한 XSS 방지)
+    const txn = ((qs.get('txn') || 'T00000000').replace(/[^A-Za-z0-9]/g, '').slice(0, 24)) || 'T00000000';
+    const amt = Math.max(0, Math.min(Number(qs.get('amt')) || 0, 99999999));
+    const app = document.getElementById('app');
+
+    function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2000);}
+
+    function screen1() {
+      app.innerHTML = `
+        <header class="appbar"><div class="spacer"></div><h1>결제하기</h1><div class="spacer"></div></header>
+        <div class="screen">
+          <div class="hero">
+            <div class="store">데모 분식 강남점</div>
+            <div class="amt">₩ ${won(amt)}</div>
+            <div class="sub">거래번호 ${txn}</div>
+          </div>
+          <div class="section-title">결제수단 선택</div>
+          <div class="opt-list">
+            <label class="opt-item"><input type="radio" name="pm" value="card" checked><div class="oc"><div class="ot">신용/체크카드</div><div class="od">간편결제 · 일반결제</div></div></label>
+            <label class="opt-item"><input type="radio" name="pm" value="kakao"><div class="oc"><div class="ot">카카오페이</div></div></label>
+            <label class="opt-item"><input type="radio" name="pm" value="naver"><div class="oc"><div class="ot">네이버페이</div></div></label>
+            <label class="opt-item"><input type="radio" name="pm" value="phone"><div class="oc"><div class="ot">휴대폰 결제</div></div></label>
+          </div>
+          <button class="btn" style="margin-top:18px" onclick="pay()">₩ ${won(amt)} 결제하기</button>
+          <div class="note">고객이 SMS/알림톡 링크로 진입하는 결제창(데모)입니다.</div>
+        </div>`;
+    }
+    function pay() {
+      app.innerHTML = `<header class="appbar"><div class="spacer"></div><h1>결제하기</h1><div class="spacer"></div></header>
+        <div class="screen"><div class="spinner-wrap"><div class="spinner"></div><p>결제 승인 처리 중...</p></div></div>`;
+      setTimeout(() => {
+        app.innerHTML = `
+          <header class="appbar"><div class="spacer"></div><h1>결제완료</h1><div class="spacer"></div></header>
+          <div class="screen">
+            <div class="result">
+              <div class="circle ok">✓</div>
+              <h2>결제가 완료되었습니다</h2>
+              <p>영수증이 발급되었습니다.</p>
+            </div>
+            <div class="card">
+              <div class="kv"><span class="k">가맹점</span><span class="v">데모 분식 강남점</span></div>
+              <div class="kv"><span class="k">결제금액</span><span class="v">₩ ${won(amt)}</span></div>
+              <div class="kv"><span class="k">거래번호</span><span class="v">${txn}</span></div>
+              <div class="kv"><span class="k">승인번호</span><span class="v">${String(Math.floor(Math.random()*1e8)).padStart(8,'0')}</span></div>
+            </div>
+            <div class="note">창을 닫으셔도 됩니다.</div>
+          </div>`;
+      }, 1600);
+    }
+    if (amt <= 0) {
+      app.innerHTML = `<div class="screen"><div class="empty"><div class="ic">⚠️</div>유효하지 않은 결제 링크입니다.</div></div>`;
+    } else { screen1(); }
+  </script>
+</body>
+</html>
