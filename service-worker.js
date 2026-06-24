@@ -1,5 +1,5 @@
 /* MerchantPay PWA 서비스워커 — 오프라인 캐시 + 빠른 로딩 */
-const CACHE = 'merchantpay-m-v1';
+const CACHE = 'merchantpay-m-v2';
 const CORE = [
   './', 'index.html', 'styles.css', 'app.js',
   'qronix-logo.png', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png',
