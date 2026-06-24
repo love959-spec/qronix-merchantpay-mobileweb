@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#346DDB" />
+  <title>MerchantPay 다운로드</title>
+  <style>
+    :root{ --brand:#346DDB; --brand-d:#2557b5; --ink:#1d2433; --muted:#6b7689; }
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+    body{ font-family:"Pretendard","Segoe UI","Malgun Gothic",system-ui,sans-serif; color:var(--ink);
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:28px 18px calc(28px + env(safe-area-inset-bottom));
+      background:linear-gradient(160deg,#5b8cf0,#2557b5); }
+    .wrap{ width:100%; max-width:680px; background:#fff; border-radius:26px; padding:30px 24px 26px;
+      box-shadow:0 22px 54px rgba(0,0,0,.28); }
+    .head{ text-align:center; margin-bottom:24px; }
+    .head .corp{ color:var(--brand); font-weight:800; font-size:16px; }
+    .head h1{ font-size:24px; font-weight:800; letter-spacing:-.5px; margin:5px 0 5px; }
+    .head p{ color:var(--muted); font-size:14px; }
+    .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+    .card{ border:1px solid #e4e9f3; border-radius:18px; padding:24px 18px; text-align:center; transition:.15s; }
+    .card:hover{ border-color:var(--brand); box-shadow:0 8px 22px rgba(52,109,219,.12); }
+    .icon{ width:78px; height:78px; margin:0 auto 14px; display:block; }
+    .card h2{ font-size:17px; font-weight:800; }
+    .card .desc{ color:var(--muted); font-size:13px; margin:7px 0 9px; min-height:34px; }
+    .tag{ display:inline-block; font-size:11.5px; color:#185FA5; background:#E6F1FB; padding:4px 12px; border-radius:999px; margin-bottom:16px; }
+    .btn{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:14px;
+      border-radius:13px; font-size:15px; font-weight:700; text-decoration:none; transition:.12s; }
+    .btn-primary{ background:var(--brand); color:#fff; }
+    .btn-primary:active{ transform:scale(.98); background:var(--brand-d); }
+    .btn-link{ display:block; margin-top:11px; color:var(--brand); font-size:13px; text-decoration:none; }
+    .foot{ display:flex; justify-content:center; gap:24px; margin-top:24px; color:var(--muted); font-size:12.5px; }
+    .foot span{ display:flex; align-items:center; gap:5px; }
+    .foot svg{ width:16px; height:16px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div class="corp">Qronix</div>
+      <h1>MerchantPay 설치</h1>
+      <p>사용 환경에 맞는 버전을 선택해 설치하세요</p>
+    </div>
+
+    <div class="grid">
+      <!-- 반응형 웹 -->
+      <div class="card">
+        <svg class="icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-label="반응형 웹 아이콘">
+          <rect width="512" height="512" rx="112" fill="#FFFFFF" stroke="#346DDB" stroke-width="20"/>
+          <text x="248" y="332" font-family="'Segoe UI','Malgun Gothic',sans-serif" font-size="270" font-weight="800" fill="#346DDB" text-anchor="middle">₩</text>
+          <circle cx="402" cy="402" r="82" fill="#346DDB" stroke="#FFFFFF" stroke-width="12"/>
+          <g fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="368" y="378" width="68" height="46" rx="6"/>
+            <line x1="402" y1="424" x2="402" y2="434"/><line x1="384" y1="434" x2="420" y2="434"/>
+          </g>
+        </svg>
+        <h2>반응형 웹</h2>
+        <div class="desc">PC · 태블릿 · 휴대폰<br>모두 지원</div>
+        <span class="tag">어떤 기기든</span>
+        <a class="btn btn-primary" href="https://love959-spec.github.io/qronix-MerchantPay/install.html">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+          설치하기
+        </a>
+        <a class="btn-link" href="https://love959-spec.github.io/qronix-MerchantPay/">웹으로 바로 열기</a>
+      </div>
+
+      <!-- 모바일 앱 -->
+      <div class="card">
+        <svg class="icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-label="모바일 앱 아이콘">
+          <rect width="512" height="512" rx="112" fill="#346DDB"/>
+          <text x="248" y="332" font-family="'Segoe UI','Malgun Gothic',sans-serif" font-size="270" font-weight="800" fill="#FFFFFF" text-anchor="middle">₩</text>
+          <circle cx="402" cy="402" r="82" fill="#FFFFFF"/>
+          <g fill="none" stroke="#346DDB" stroke-width="13" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="382" y="368" width="40" height="68" rx="9"/><line x1="394" y1="378" x2="410" y2="378"/>
+          </g>
+        </svg>
+        <h2>모바일 앱</h2>
+        <div class="desc">휴대폰 전용<br>최적화 레이아웃</div>
+        <span class="tag">휴대폰 추천</span>
+        <a class="btn btn-primary" href="install.html">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+          설치하기
+        </a>
+        <a class="btn-link" href="index.html">웹으로 바로 열기</a>
+      </div>
+    </div>
+
+    <div class="foot">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#6b7689" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>빠른 실행</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#6b7689" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a9 9 0 0 1 14 0"/><path d="M8.5 16a4.5 4.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/></svg>오프라인</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#6b7689" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>생체인증</span>
+    </div>
+  </div>
+</body>
+</html>
