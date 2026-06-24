@@ -8,7 +8,10 @@
   <meta name="theme-color" content="#346DDB" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MerchantPay" />
   <title>MerchantPay · 가맹점 결제</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="stylesheet" href="styles.css" />
   <!-- QR/바코드 스캐너 (휴대폰 카메라 사용) — SRI 무결성 검증 -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer
@@ -31,5 +34,10 @@
   <div id="toast" class="toast hidden"></div>
 
   <script src="app.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('service-worker.js').catch(() => {}));
+    }
+  </script>
 </body>
 </html>
