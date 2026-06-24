@@ -1,5 +1,5 @@
 /* =========================================================
-   PayMerchant — 가맹점 결제 App (데모)
+   MerchantPay — 가맹점 결제 App (데모)
    순수 바닐라 JS SPA (해시 라우팅 + localStorage 목 백엔드)
    ========================================================= */
 
@@ -146,7 +146,7 @@ function updateBottomNav(path) {
     const item = (t) =>
       `<button class="sb-item ${active(t.path)}" onclick="go('${t.path}')"><span class="sb-ic">${t.icon}</span><span>${esc(t.label)}</span></button>`;
     sb.innerHTML =
-      `<div class="sb-brand"><div class="sb-logo">₩</div><div class="sb-info"><div class="sb-title">PayMerchant</div><div class="sb-store">${esc(cfg.storeName)}</div></div></div>` +
+      `<div class="sb-brand"><div class="sb-logo">₩</div><div class="sb-info"><div class="sb-title">MerchantPay</div><div class="sb-store">${esc(cfg.storeName)}</div></div></div>` +
       `<nav class="sb-list">${BOTTOM_TABS.map(item).join('')}<div class="sb-div"></div>${SIDE_MORE.map(item).join('')}` +
       `<button class="sb-item sb-logout" onclick="doLogout()"><span class="sb-ic">⎋</span><span>로그아웃</span></button></nav>`;
     sb.classList.remove('hidden');
@@ -211,9 +211,16 @@ function doLogout() { Store.logout(); closeDrawer(); toast('로그아웃 되었�
 let pendingUser = null;   // 1차 인증(ID/PW) 통과한 사용자
 let pendingSecret = null; // OTP 등록 중 임시 시크릿
 
+// 생체인증 아이콘 (깔끔한 라인 SVG — 버튼 색상 상속)
+const ICON_FACEID = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M4 16v2a2 2 0 0 0 2 2h2"/><path d="M16 20h2a2 2 0 0 0 2-2v-2"/><path d="M9 10v.9"/><path d="M15 10v.9"/><path d="M12 9.4v3.1l-1 .8"/><path d="M9.3 15a3.6 3.6 0 0 0 5.4 0"/></svg>`;
+const ICON_FINGER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 11a6 6 0 0 1 11.4-2.6"/><path d="M6 15v-4"/><path d="M18 11.5V14a14 14 0 0 1-.6 4.2"/><path d="M9.5 9.7A3 3 0 0 1 15 11.5V14a11 11 0 0 1-.6 3.7"/><path d="M12 11.5V14a12 12 0 0 1-1 5.2"/><path d="M7.2 16.5A13 13 0 0 0 7.6 20"/></svg>`;
+
 function loginShell(inner) {
   return `<div class="login-wrap">
-      <div class="brand"><div class="logo">₩</div><h1>PayMerchant</h1><p>가맹점 결제 단말 · 데모</p></div>
+      <div class="brand">
+        <img class="corp-logo" src="qronix-logo.png" alt="Qronix" />
+        <h1>MerchantPay</h1>
+      </div>
       <div class="login-card">${inner}</div>
     </div>`;
 }
@@ -239,7 +246,7 @@ function renderLogin(method) {
       ${loginSwitchLinks('idpw')}
       <div class="note">데모: ID/비밀번호는 검증하지 않습니다. 다음 단계에서 <b>구글 OTP</b> 인증을 진행합니다.</div>`;
   } else if (m === 'faceid' || m === 'fingerprint') {
-    const ic = m === 'faceid' ? '🙂' : '☝️';
+    const ic = m === 'faceid' ? ICON_FACEID : ICON_FINGER;
     const nm = m === 'faceid' ? 'Face ID' : '지문인증';
     if (!hasBio()) {
       inner = `<h2>${nm} 로그인</h2>
@@ -275,8 +282,8 @@ function renderOtpStep() { if (hasTotp()) renderOtpEntry(); else renderOtpSetup(
 
 function renderOtpSetup() {
   pendingSecret = randomBase32(16);
-  const label = encodeURIComponent('PayMerchant:' + (pendingUser || 'user'));
-  const uri = `otpauth://totp/${label}?secret=${pendingSecret}&issuer=PayMerchant&algorithm=SHA1&digits=6&period=30`;
+  const label = encodeURIComponent('MerchantPay:' + (pendingUser || 'user'));
+  const uri = `otpauth://totp/${label}?secret=${pendingSecret}&issuer=MerchantPay&algorithm=SHA1&digits=6&period=30`;
   app.innerHTML = loginShell(`
     <h2>구글 OTP 등록</h2>
     <p style="font-size:13px;color:var(--muted);margin:0 0 12px">Google Authenticator(구글 OTP) 앱에서 아래 QR을 스캔하거나 설정키를 입력해 계정을 추가하세요.</p>
@@ -404,7 +411,7 @@ async function webauthnRegister() {
   const cred = await navigator.credentials.create({
     publicKey: {
       challenge: randBytes(32),
-      rp: { name: 'PayMerchant', id: location.hostname },
+      rp: { name: 'MerchantPay', id: location.hostname },
       user: { id: randBytes(16), name: cfg.userId, displayName: cfg.userId },
       pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
       authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' },
@@ -444,7 +451,7 @@ async function bioLogin(name) {
 }
 function bioFallback(name, message) {
   const card = app.querySelector('.login-card');
-  const ic = name.indexOf('Face') >= 0 ? '🙂' : '☝️';
+  const ic = name.indexOf('Face') >= 0 ? ICON_FACEID : ICON_FINGER;
   card.innerHTML = `
     <h2>${name} 로그인</h2>
     <div class="note" style="border-color:#f5c6cb;background:#fff5f6;color:var(--danger);white-space:pre-line">${message}</div>
@@ -708,7 +715,7 @@ route('/main', () => {
   const total = todays.reduce((s, t) => s + t.amount, 0);
 
   app.innerHTML = `
-    ${appbar('PayMerchant', { menu: true })}
+    ${appbar('MerchantPay', { menu: true })}
     <div class="screen">
       <div class="hero">
         <div class="store">${esc(cfg.storeName)}</div>

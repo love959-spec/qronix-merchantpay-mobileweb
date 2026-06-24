@@ -1,15 +1,15 @@
 :root {
-  --primary: #3b3bd6;
-  --primary-dark: #2a2aa8;
-  --primary-light: #ececff;
+  --primary: #346DDB;
+  --primary-dark: #2557B5;
+  --primary-light: #E3ECFB;
   --kakao: #fee500;
   --kakao-text: #191600;
   --sms: #19b36b;
-  --bg: #f4f5f8;
+  --bg: #f4f7fe;
   --card: #ffffff;
-  --text: #1a1c22;
-  --muted: #767b8a;
-  --line: #e7e9f0;
+  --text: #1d2433;
+  --muted: #6b7689;
+  --line: #e4e9f3;
   --danger: #e23a4e;
   --success: #1aa86b;
   --radius: 16px;
@@ -57,15 +57,17 @@ input, select { font-family: inherit; font-size: 16px; }
 .section-title:first-child { margin-top: 6px; }
 
 /* ---------- Login ---------- */
-.login-wrap { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 32px 26px calc(40px + var(--safe-bottom)); background: linear-gradient(160deg, #4848e6, #2a2aa8); }
+.login-wrap { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 32px 26px calc(40px + var(--safe-bottom)); background: linear-gradient(160deg, #5b8cf0, #2557b5); }
 .brand { text-align: center; color: #fff; margin-bottom: 34px; }
+.brand .corp-logo { height: clamp(32px, 9.5vw, 44px); width: auto; display: block; margin: 0 auto 22px; }
 .brand .logo { width: 76px; height: 76px; border-radius: 22px; background: #fff; color: var(--primary); font-size: 40px; display: grid; place-items: center; margin: 0 auto 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
-.brand h1 { font-size: 25px; margin: 0 0 6px; letter-spacing: -.5px; }
+.brand h1 { font-size: clamp(30px, 8.5vw, 40px); font-weight: 800; margin: 0 0 6px; letter-spacing: -1px; }
 .brand p { margin: 0; opacity: .8; font-size: 14px; }
 .login-card { background: #fff; border-radius: 20px; padding: 22px 20px; box-shadow: 0 16px 40px rgba(0,0,0,.2); }
 .login-card h2 { font-size: 16px; margin: 0 0 16px; }
 .bio-btn { width: 100%; border: 2px solid var(--primary-light); background: var(--primary-light); color: var(--primary); border-radius: 14px; padding: 22px; font-size: 16px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.bio-btn .big { font-size: 42px; }
+.bio-btn .big { font-size: 42px; line-height: 1; }
+.bio-btn .big svg { width: 46px; height: 46px; display: block; }
 .pin-dots { display: flex; justify-content: center; gap: 14px; margin: 10px 0 20px; }
 .pin-dots span { width: 14px; height: 14px; border-radius: 50%; background: var(--line); transition: .15s; }
 .pin-dots span.on { background: var(--primary); transform: scale(1.1); }
@@ -92,7 +94,7 @@ input, select { font-family: inherit; font-size: 16px; }
 .btn-row .btn { margin-top: 0; }
 
 /* ---------- Main menu grid ---------- */
-.hero { background: linear-gradient(135deg, var(--primary), #5a5ae8); color: #fff; border-radius: var(--radius); padding: 18px 18px 20px; margin-bottom: 18px; box-shadow: var(--shadow); }
+.hero { background: linear-gradient(135deg, var(--primary), #5b8cf0); color: #fff; border-radius: var(--radius); padding: 18px 18px 20px; margin-bottom: 18px; box-shadow: var(--shadow); }
 .hero .store { font-size: 13px; opacity: .85; }
 .hero .amt { font-size: 27px; font-weight: 800; margin-top: 4px; letter-spacing: -.5px; }
 .hero .sub { font-size: 12px; opacity: .8; margin-top: 6px; }
@@ -209,20 +211,22 @@ input, select { font-family: inherit; font-size: 16px; }
   box-shadow: 0 -2px 12px rgba(40,45,80,.06);
 }
 .bottomnav .bn-item {
-  flex: 1; min-width: 0; background: none; padding: 8px 2px 9px; display: flex; flex-direction: column;
-  align-items: center; gap: 3px; color: var(--muted); font-size: 10px; font-weight: 600;
+  flex: 1; min-width: 0; background: none;
+  padding: clamp(7px, 1.7vw, 12px) 2px clamp(8px, 1.8vw, 13px); display: flex; flex-direction: column;
+  align-items: center; gap: clamp(2px, 0.6vw, 5px); color: var(--muted);
+  font-size: clamp(9.5px, 2.7vw, 13px); font-weight: 600;
 }
 .bottomnav .bn-item .bn-lb { white-space: nowrap; }
-.bottomnav .bn-item .bn-ic { font-size: 20px; line-height: 1; }
+.bottomnav .bn-item .bn-ic { font-size: clamp(19px, 5vw, 26px); line-height: 1; }
 .bottomnav .bn-item.active { color: var(--primary); }
 .bottomnav .bn-item:active { background: var(--bg); }
-body.has-bottomnav #app .screen { padding-bottom: calc(80px + var(--safe-bottom)); }
+body.has-bottomnav #app .screen { padding-bottom: calc(clamp(72px, 15vw, 94px) + var(--safe-bottom)); }
 
 
 /* ---------- 생체인증 등록 화면 ---------- */
 .enroll-hero { text-align: center; padding: 12px 10px 18px; }
 .enroll-hero .eh-icon { width: 92px; height: 92px; border-radius: 28px; display: grid; place-items: center; font-size: 46px; margin: 0 auto 14px; background: var(--primary-light); color: var(--primary); box-shadow: var(--shadow); animation: pop .35s ease; }
-.enroll-hero .eh-icon.gradient { background: linear-gradient(135deg, var(--primary), #6a6af0); color: #fff; }
+.enroll-hero .eh-icon.gradient { background: linear-gradient(135deg, var(--primary), #5b8cf0); color: #fff; }
 .enroll-hero.done .eh-icon { background: #e3f7ee; color: var(--success); }
 .enroll-hero h2 { margin: 0 0 6px; font-size: 21px; letter-spacing: -.3px; }
 .enroll-hero p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
